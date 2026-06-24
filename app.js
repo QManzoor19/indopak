@@ -137,8 +137,7 @@ const LAYOUT_CLASSES = ['lay-justified', 'lay-centered', 'lay-verse', 'lay-spaci
 
 const RULE_IDS = ['rWasl', 'rHamza', 'rSukoon', 'rTatweel', 'rKhari', 'rMadd', 'rAllah', 'rDagger', 'rMarks', 'rYeh', 'rKaf', 'rHeh'];
 
-// Uthmani input — the conversion rules render it as IndoPak in the output panel.
-const SAMPLE = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nمَٰلِكِ يَوْمِ ٱلدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ';
+const SAMPLE = 'اَللّٰهُمَّ اِنِّیْ ضَعِیْفٌ فَقَوِّ فِیْ رِضَاکَ ضَعْفِیْ وَ خُذْ اِلَی الْخَیْرِ بِنَاصِیَتِیْ وَ اجْعَلِ الْاِسْلَامَ مُنْتَہٰی رِضَایْ، اَللّٰهُمَّ اِنِّیْ ضَعِیْفٌ فَقَوِّنِیْ، وَ اِنِّیْ ذَلِیْلٌ فَاَعِزَّنِیْ، وَ فَقِیْرٌ فَارْزُقْنِیْ';
 
 function currentRules() {
   const enabled = {};
