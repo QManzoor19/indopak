@@ -119,13 +119,14 @@
     <fieldset class="control rules">
       <legend>Conversion rules</legend>
       <label class="switch"><input type="checkbox" id="rWasl" checked /> <span>Alif-wasla ٱ → plain alif ا</span></label>
-      <label class="switch"><input type="checkbox" id="rSukoon" checked /> <span>Uthmani sukoon ۡ → jazm ْ</span></label>
+      <label class="switch"><input type="checkbox" id="rKhari" checked /> <span>Khari alif: drop fatḥa before dagger alif (عَٰ → عٰ, vertical stroke only)</span></label>
+      <label class="switch"><input type="checkbox" id="rSukoon" /> <span>Sukoon ۡ → jazm ْ (leave OFF to keep quran.com IndoPak ۡ)</span></label>
       <label class="switch"><input type="checkbox" id="rDagger" /> <span>Convert dagger alif ٰ → full standing alif ا (leave OFF to keep the IndoPak khaṛī stroke مٰ)</span></label>
       <label class="switch"><input type="checkbox" id="rMarks" /> <span>Strip Quranic annotation / waqf marks</span></label>
       <label class="switch"><input type="checkbox" id="rTatweel" /> <span>Remove tatweel ـ</span></label>
       <hr style="border:0;border-top:1px solid var(--gold-dim);opacity:.5;margin:8px 0" />
-      <label class="switch"><input type="checkbox" id="rYeh" checked /> <span>Urdu yeh: ي → ی</span></label>
-      <label class="switch"><input type="checkbox" id="rKaf" checked /> <span>Urdu kaf: ك → ک</span></label>
+      <label class="switch"><input type="checkbox" id="rYeh" /> <span>Urdu yeh: ي → ی (OFF matches quran.com IndoPak ي)</span></label>
+      <label class="switch"><input type="checkbox" id="rKaf" /> <span>Urdu kaf: ك → ک (OFF matches quran.com IndoPak ك)</span></label>
       <label class="switch"><input type="checkbox" id="rHeh" /> <span>Urdu heh: ه → ہ</span></label>
     </fieldset>
   </section>

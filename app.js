@@ -41,6 +41,10 @@ function countReplace(text, pattern, replacement) {
 
 const RULES = {
   rWasl:    (t) => countReplace(t, new RegExp(CH.ALEF_WASLA, 'g'), CH.ALEF),
+  // Khari alif: a fatha immediately before a dagger alif draws an extra slanted
+  // stroke (عَٰ). IndoPak writes the long-ā as the dagger alone (عٰ) — just the
+  // vertical stroke — so drop that fatha.
+  rKhari:   (t) => countReplace(t, /َٰ/g, CH.DAGGER_ALEF),
   rSukoon:  (t) => countReplace(t, new RegExp(CH.SMALL_HIGH_KHAH, 'g'), CH.SUKOON),
   // Dagger alif → a single standing alif, without ever producing a double alif:
   //  • dagger next to an existing alif → just drop the dagger (alif already there)
@@ -66,6 +70,7 @@ const RULES = {
 
 const RULE_LABELS = {
   rWasl: 'alif-wasla',
+  rKhari: 'khari alif (drop fatha)',
   rSukoon: 'sukoon→jazm',
   rDagger: 'dagger-alif',
   rMarks: 'marks stripped',
@@ -100,9 +105,9 @@ const layoutSel = $('layoutSel');
 
 const LAYOUT_CLASSES = ['lay-justified', 'lay-centered', 'lay-verse', 'lay-spacious', 'lay-compact'];
 
-const RULE_IDS = ['rWasl', 'rSukoon', 'rDagger', 'rMarks', 'rTatweel', 'rYeh', 'rKaf', 'rHeh'];
+const RULE_IDS = ['rWasl', 'rKhari', 'rSukoon', 'rDagger', 'rMarks', 'rTatweel', 'rYeh', 'rKaf', 'rHeh'];
 
-const SAMPLE = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nمَٰلِكِ يَوْمِ ٱلدِّينِ';
+const SAMPLE = 'بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ\nاَلۡحَمۡدُ لِلّٰهِ رَبِّ الۡعٰلَمِيۡنَۙ\nالرَّحۡمٰنِ الرَّحِيۡمِۙ\nمٰلِكِ يَوۡمِ الدِّيۡنِؕ';
 
 function currentRules() {
   const enabled = {};

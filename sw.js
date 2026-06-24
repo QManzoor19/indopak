@@ -1,4 +1,4 @@
-const CACHE = 'indopak-v9';
+const CACHE = 'indopak-v10';
 const ASSETS = [
   '.',
   'index.html',
