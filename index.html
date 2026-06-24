@@ -117,16 +117,19 @@
     </div>
 
     <fieldset class="control rules">
-      <legend>Conversion rules</legend>
+      <legend>Uthmani → IndoPak</legend>
       <label class="switch"><input type="checkbox" id="rWasl" checked /> <span>Alif-wasla ٱ → plain alif ا</span></label>
-      <label class="switch"><input type="checkbox" id="rKhari" checked /> <span>Khari alif: drop fatḥa before dagger alif (عَٰ → عٰ, vertical stroke only)</span></label>
-      <label class="switch"><input type="checkbox" id="rSukoon" /> <span>Sukoon ۡ → jazm ْ (leave OFF to keep quran.com IndoPak ۡ)</span></label>
-      <label class="switch"><input type="checkbox" id="rDagger" /> <span>Convert dagger alif ٰ → full standing alif ا (leave OFF to keep the IndoPak khaṛī stroke مٰ)</span></label>
-      <label class="switch"><input type="checkbox" id="rMarks" /> <span>Strip Quranic annotation / waqf marks</span></label>
-      <label class="switch"><input type="checkbox" id="rTatweel" /> <span>Remove tatweel ـ</span></label>
+      <label class="switch"><input type="checkbox" id="rHamza" checked /> <span>Hamza-alif أ إ → plain alif ا</span></label>
+      <label class="switch"><input type="checkbox" id="rSukoon" checked /> <span>Sukoon ْ → IndoPak ۡ</span></label>
+      <label class="switch"><input type="checkbox" id="rTatweel" checked /> <span>Remove tatweel ـ</span></label>
+      <label class="switch"><input type="checkbox" id="rKhari" checked /> <span>Khari alif: عَٰ → عٰ (vertical stroke only)</span></label>
+      <label class="switch"><input type="checkbox" id="rMadd" checked /> <span>Add madd sukoon on long ī/ū (ِي → ِيۡ)</span></label>
       <hr style="border:0;border-top:1px solid var(--gold-dim);opacity:.5;margin:8px 0" />
-      <label class="switch"><input type="checkbox" id="rYeh" /> <span>Urdu yeh: ي → ی (OFF matches quran.com IndoPak ي)</span></label>
-      <label class="switch"><input type="checkbox" id="rKaf" /> <span>Urdu kaf: ك → ک (OFF matches quran.com IndoPak ك)</span></label>
+      <legend style="padding:0 8px;font-size:12px">Optional styling</legend>
+      <label class="switch"><input type="checkbox" id="rDagger" /> <span>Dagger alif ٰ → full standing alif ا (عٰ → عا)</span></label>
+      <label class="switch"><input type="checkbox" id="rMarks" /> <span>Strip Quranic annotation / waqf marks</span></label>
+      <label class="switch"><input type="checkbox" id="rYeh" /> <span>Urdu yeh: ي → ی</span></label>
+      <label class="switch"><input type="checkbox" id="rKaf" /> <span>Urdu kaf: ك → ک</span></label>
       <label class="switch"><input type="checkbox" id="rHeh" /> <span>Urdu heh: ه → ہ</span></label>
     </fieldset>
   </section>

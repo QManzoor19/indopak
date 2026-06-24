@@ -18,6 +18,8 @@ const CH = {
   SUKOON:            'ْ', // ْ  standard sukoon — rendered as jazm in IndoPak fonts
   DAGGER_ALEF:       'ٰ', // ٰ  superscript (dagger) alif
   TATWEEL:           'ـ', // ـ  kashida / tatweel
+  HAMZA_ABOVE:       'أ', // أ  alif with hamza above (Uthmani)
+  HAMZA_BELOW:       'إ', // إ  alif with hamza below (Uthmani)
   // Urdu / IndoPak letter forms
   YEH_AR:            'ي', // ي  Arabic yeh (two dots)
   YEH_UR:            'ی', // ی  Farsi/Urdu yeh (dotless final)
@@ -39,42 +41,60 @@ function countReplace(text, pattern, replacement) {
   return { text: out, count };
 }
 
+// Any harakah / shadda / sukoon / dagger — used as a "already-marked" guard.
+const DIACRITIC_AFTER = /[ً-ْٰۡ]/;
+
 const RULES = {
+  // ── Uthmani → IndoPak core conversions (on by default) ──────────────
+  // Alif-wasla ٱ → plain alif ا
   rWasl:    (t) => countReplace(t, new RegExp(CH.ALEF_WASLA, 'g'), CH.ALEF),
-  // Khari alif: a fatha immediately before a dagger alif draws an extra slanted
-  // stroke (عَٰ). IndoPak writes the long-ā as the dagger alone (عٰ) — just the
-  // vertical stroke — so drop that fatha.
-  rKhari:   (t) => countReplace(t, /َٰ/g, CH.DAGGER_ALEF),
-  rSukoon:  (t) => countReplace(t, new RegExp(CH.SMALL_HIGH_KHAH, 'g'), CH.SUKOON),
-  // Dagger alif → a single standing alif, without ever producing a double alif:
-  //  • dagger next to an existing alif → just drop the dagger (alif already there)
-  //  • fatha + dagger (long ā, no written alif) → one alif, dropping the now-redundant
-  //    fatha (which the IndoPak font would otherwise draw as a second vertical stroke)
-  //  • any remaining lone dagger → standing alif
-  rDagger: (t) => {
+  // Alif carrying hamza (Uthmani أ / إ) → plain alif ا (IndoPak)
+  rHamza:   (t) => countReplace(t, /[أإ]/g, CH.ALEF),
+  // Standard sukoon ْ (U+0652) → IndoPak sukoon ۡ (U+06E1, small high khah)
+  rSukoon:  (t) => countReplace(t, new RegExp(CH.SUKOON, 'g'), CH.SMALL_HIGH_KHAH),
+  // Tatweel / kashida ـ → removed
+  rTatweel: (t) => countReplace(t, new RegExp(CH.TATWEEL, 'g'), ''),
+  // Khari alif: a fatha (and any tatweel) before a dagger alif draws an extra
+  // slanted stroke (عَٰ). IndoPak writes the long-ā as the dagger alone (عٰ) —
+  // just the vertical stroke — so drop them.
+  rKhari:   (t) => countReplace(t, /[َـ]+ٰ/g, CH.DAGGER_ALEF),
+  // Madd letters: IndoPak marks a long ī / ū with a sukoon on the weak letter.
+  //   kasra+yaa (ِي) → ِيۡ , damma+waw (ُو) → ُوۡ  — only when not already marked.
+  rMadd: (t) => {
     let count = 0;
-    const bump = () => { count++; return CH.ALEF; };
     let out = t
-      .replace(/اٰ/g, () => { count++; return CH.ALEF; }) // alif + dagger
-      .replace(/ٰا/g, () => { count++; return CH.ALEF; }) // dagger + alif
-      .replace(/َ?ٰ/g, bump);                            // (fatha?) + dagger
+      .replace(/ِي(?![ً-ْٰۡ])/g, () => { count++; return 'ِي' + CH.SMALL_HIGH_KHAH; })
+      .replace(/ُو(?![ً-ْٰۡ])/g, () => { count++; return 'ُو' + CH.SMALL_HIGH_KHAH; });
     return { text: out, count };
   },
+
+  // ── Optional styling (off by default) ───────────────────────────────
+  // Convert the dagger/khari stroke to a FULL standing alif (عٰ → عا).
+  rDagger: (t) => {
+    let count = 0;
+    let out = t
+      .replace(/اٰ/g, () => { count++; return CH.ALEF; })
+      .replace(/ٰا/g, () => { count++; return CH.ALEF; })
+      .replace(/[َـ]*ٰ/g, () => { count++; return CH.ALEF; });
+    return { text: out, count };
+  },
+  // Strip Quranic annotation / waqf marks
   rMarks:   (t) => countReplace(t, ANNOTATION_RE, ''),
-  rTatweel: (t) => countReplace(t, new RegExp(CH.TATWEEL, 'g'), ''),
-  // Urdu / IndoPak letter forms
+  // Urdu letter forms
   rYeh:     (t) => countReplace(t, new RegExp(CH.YEH_AR, 'g'), CH.YEH_UR),
   rKaf:     (t) => countReplace(t, new RegExp(CH.KAF_AR, 'g'), CH.KAF_UR),
   rHeh:     (t) => countReplace(t, new RegExp(CH.HEH_AR, 'g'), CH.HEH_UR),
 };
 
 const RULE_LABELS = {
-  rWasl: 'alif-wasla',
-  rKhari: 'khari alif (drop fatha)',
-  rSukoon: 'sukoon→jazm',
-  rDagger: 'dagger-alif',
-  rMarks: 'marks stripped',
+  rWasl: 'wasla→alif',
+  rHamza: 'hamza-alif→alif',
+  rSukoon: 'sukoon→ۡ',
   rTatweel: 'tatweel removed',
+  rKhari: 'khari alif',
+  rMadd: 'madd ۡ added',
+  rDagger: 'dagger→full alif',
+  rMarks: 'marks stripped',
   rYeh: 'yeh→ی',
   rKaf: 'kaf→ک',
   rHeh: 'heh→ہ',
@@ -105,9 +125,10 @@ const layoutSel = $('layoutSel');
 
 const LAYOUT_CLASSES = ['lay-justified', 'lay-centered', 'lay-verse', 'lay-spacious', 'lay-compact'];
 
-const RULE_IDS = ['rWasl', 'rKhari', 'rSukoon', 'rDagger', 'rMarks', 'rTatweel', 'rYeh', 'rKaf', 'rHeh'];
+const RULE_IDS = ['rWasl', 'rHamza', 'rSukoon', 'rTatweel', 'rKhari', 'rMadd', 'rDagger', 'rMarks', 'rYeh', 'rKaf', 'rHeh'];
 
-const SAMPLE = 'بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ\nاَلۡحَمۡدُ لِلّٰهِ رَبِّ الۡعٰلَمِيۡنَۙ\nالرَّحۡمٰنِ الرَّحِيۡمِۙ\nمٰلِكِ يَوۡمِ الدِّيۡنِؕ';
+// Uthmani input — the conversion rules render it as IndoPak in the output panel.
+const SAMPLE = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nمَٰلِكِ يَوْمِ ٱلدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ';
 
 function currentRules() {
   const enabled = {};
