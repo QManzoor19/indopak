@@ -18,6 +18,13 @@ const CH = {
   SUKOON:            'ْ', // ْ  standard sukoon — rendered as jazm in IndoPak fonts
   DAGGER_ALEF:       'ٰ', // ٰ  superscript (dagger) alif
   TATWEEL:           'ـ', // ـ  kashida / tatweel
+  // Urdu / IndoPak letter forms
+  YEH_AR:            'ي', // ي  Arabic yeh (two dots)
+  YEH_UR:            'ی', // ی  Farsi/Urdu yeh (dotless final)
+  KAF_AR:            'ك', // ك  Arabic kaf
+  KAF_UR:            'ک', // ک  Urdu keheh
+  HEH_AR:            'ه', // ه  Arabic heh
+  HEH_UR:            'ہ', // ہ  Urdu heh goal
 };
 
 // Quranic annotation & waqf marks (small high letters, stop signs, etc.)
@@ -39,6 +46,10 @@ const RULES = {
   rDagger:  (t) => countReplace(t, new RegExp(CH.DAGGER_ALEF, 'g'), CH.ALEF),
   rMarks:   (t) => countReplace(t, ANNOTATION_RE, ''),
   rTatweel: (t) => countReplace(t, new RegExp(CH.TATWEEL, 'g'), ''),
+  // Urdu / IndoPak letter forms
+  rYeh:     (t) => countReplace(t, new RegExp(CH.YEH_AR, 'g'), CH.YEH_UR),
+  rKaf:     (t) => countReplace(t, new RegExp(CH.KAF_AR, 'g'), CH.KAF_UR),
+  rHeh:     (t) => countReplace(t, new RegExp(CH.HEH_AR, 'g'), CH.HEH_UR),
 };
 
 const RULE_LABELS = {
@@ -47,6 +58,9 @@ const RULE_LABELS = {
   rDagger: 'dagger-alif',
   rMarks: 'marks stripped',
   rTatweel: 'tatweel removed',
+  rYeh: 'yeh→ی',
+  rKaf: 'kaf→ک',
+  rHeh: 'heh→ہ',
 };
 
 function convert(text, enabled) {
@@ -74,7 +88,7 @@ const layoutSel = $('layoutSel');
 
 const LAYOUT_CLASSES = ['lay-justified', 'lay-centered', 'lay-verse', 'lay-spacious', 'lay-compact'];
 
-const RULE_IDS = ['rWasl', 'rSukoon', 'rDagger', 'rMarks', 'rTatweel'];
+const RULE_IDS = ['rWasl', 'rSukoon', 'rDagger', 'rMarks', 'rTatweel', 'rYeh', 'rKaf', 'rHeh'];
 
 const SAMPLE = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nمَٰلِكِ يَوْمِ ٱلدِّينِ';
 
