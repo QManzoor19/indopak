@@ -1,6 +1,18 @@
 /* ── Islamic aesthetic theme ──────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@500;600;700&display=swap');
 
+/* Authentic IndoPak Quran fonts (the ones quran.com uses) */
+@font-face {
+  font-family: 'IndoPak Nastaleeq';
+  src: url('fonts/indopak-nastaleeq.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PDMS Saleem';
+  src: url('fonts/pdms-saleem.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
   /* Deep emerald + gold palette */
   --bg: #0a2018;
@@ -170,9 +182,9 @@ body {
 
 /* ── Arabic input / output ───────────────────────────────────────── */
 .ar-input, .ar-output {
-  font-family: "Amiri", "Scheherazade New", serif;
+  font-family: "IndoPak Nastaleeq", "PDMS Saleem", "Amiri", serif;
   font-size: 30px;
-  line-height: 2.2;
+  line-height: 2.6;
   min-height: 60vh;
   flex: 1;
   width: 100%;

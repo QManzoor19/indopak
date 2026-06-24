@@ -1,4 +1,4 @@
-const CACHE = 'indopak-v4';
+const CACHE = 'indopak-v5';
 const ASSETS = [
   '.',
   'index.html',
@@ -9,7 +9,9 @@ const ASSETS = [
   'pattern.svg',
   'apple-touch-icon.png',
   'icon-192.png',
-  'icon-512.png'
+  'icon-512.png',
+  'fonts/indopak-nastaleeq.woff2',
+  'fonts/pdms-saleem.ttf'
 ];
 
 self.addEventListener('install', (e) => {
