@@ -269,6 +269,37 @@ input[type="range"] { accent-color: var(--gold); }
   margin-bottom: 6px;
 }
 
+/* ── Mobile refinements ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  body {
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+    font-size: 16px;
+  }
+  .topbar { flex-wrap: wrap; gap: 10px; }
+  .brand-mark { width: 48px; height: 48px; font-size: 24px; }
+  .brand-text h1 { font-size: 22px; }
+  .layout { gap: 14px; margin-top: 20px; }
+  .panel { padding: 5px; }
+  .panel-head { flex-wrap: wrap; gap: 8px; }
+  .panel-actions { flex-wrap: wrap; }
+  /* Larger tap targets */
+  .chip { padding: 8px 14px; font-size: 14px; }
+  .icon-btn { width: 46px; height: 46px; }
+  .switch { margin: 10px 0; }            /* easier to tap checkboxes */
+  .switch input { width: 20px; height: 20px; }
+  /* Shorter Arabic boxes so both fit without endless scroll */
+  .ar-input, .ar-output { min-height: 38vh; font-size: 26px; line-height: 2; }
+  .controls { padding: 16px; gap: 16px; }
+  .notes { padding: 14px; }
+}
+
+/* Prevent iOS auto-zoom on focus (needs ≥16px) and stop horizontal overflow */
+@media (max-width: 600px) {
+  .ar-input, .control select { font-size: 16px; }
+  .ar-input { font-size: 26px; }   /* re-assert Arabic size after the rule above */
+  html, body { max-width: 100%; overflow-x: hidden; }
+}
+
 /* ── Toast ───────────────────────────────────────────────────────── */
 .toast {
   position: fixed;
