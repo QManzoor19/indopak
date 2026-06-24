@@ -67,6 +67,15 @@ const RULES = {
       .replace(/ُو(?![ً-ْٰۡ])/g, () => { count++; return 'ُو' + CH.SMALL_HIGH_KHAH; });
     return { text: out, count };
   },
+  // Lafẓ al-jalālah (Allah): write the long-ā as the vertical dagger alif over the
+  // doubled lām — اللَّه → اللّٰه , لِلَّه → لِلّٰه (order-independent, idempotent).
+  rAllah: (t) => {
+    let count = 0;
+    let out = t
+      .replace(/لل[ً-ْٰۡ]*ه/g, () => { count++; return 'للّٰه'; })
+      .replace(/لِل[ً-ْٰۡ]*ه/g, () => { count++; return 'لِلّٰه'; });
+    return { text: out, count };
+  },
 
   // ── Optional styling (off by default) ───────────────────────────────
   // Convert the dagger/khari stroke to a FULL standing alif (عٰ → عا).
@@ -93,6 +102,7 @@ const RULE_LABELS = {
   rTatweel: 'tatweel removed',
   rKhari: 'khari alif',
   rMadd: 'madd ۡ added',
+  rAllah: 'Allah → اللّٰه',
   rDagger: 'dagger→full alif',
   rMarks: 'marks stripped',
   rYeh: 'yeh→ی',
@@ -125,7 +135,7 @@ const layoutSel = $('layoutSel');
 
 const LAYOUT_CLASSES = ['lay-justified', 'lay-centered', 'lay-verse', 'lay-spacious', 'lay-compact'];
 
-const RULE_IDS = ['rWasl', 'rHamza', 'rSukoon', 'rTatweel', 'rKhari', 'rMadd', 'rDagger', 'rMarks', 'rYeh', 'rKaf', 'rHeh'];
+const RULE_IDS = ['rWasl', 'rHamza', 'rSukoon', 'rTatweel', 'rKhari', 'rMadd', 'rAllah', 'rDagger', 'rMarks', 'rYeh', 'rKaf', 'rHeh'];
 
 // Uthmani input — the conversion rules render it as IndoPak in the output panel.
 const SAMPLE = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nمَٰلِكِ يَوْمِ ٱلدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ';
