@@ -1,0 +1,12 @@
+{
+  "name": "IndoPak Converter",
+  "short_name": "IndoPak",
+  "description": "Convert Uthmani / standard Arabic text into IndoPak script.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0a2018",
+  "theme_color": "#0a2018",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

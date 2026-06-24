@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a2018" />
+  <title>IndoPak Converter — Arabic → IndoPak Script</title>
+  <meta name="description" content="Convert Uthmani / standard Arabic text into IndoPak script — rule-based diacritic conversion plus authentic IndoPak fonts." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+
+  <!-- Web fonts: Naskh + Nastaliq families used for IndoPak rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Gulzar&family=Noto+Naskh+Arabic:wght@400;700&family=Lateef:wght@400;700&family=Harmattan:wght@400;700&family=Markazi+Text:wght@400;700&family=Amiri+Quran&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">ا⟶ﮬ</span>
+      <div class="brand-text">
+        <h1>IndoPak Converter</h1>
+        <p>Arabic → IndoPak script</p>
+      </div>
+    </div>
+    <button id="themeBtn" class="icon-btn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <main class="layout">
+    <!-- INPUT -->
+    <section class="panel" aria-label="Input">
+      <div class="panel-head">
+        <h2>Input — Arabic</h2>
+        <div class="panel-actions">
+          <button id="importBtn" class="chip">Import</button>
+          <button id="sampleBtn" class="chip">Sample</button>
+          <button id="pasteBtn" class="chip">Paste</button>
+          <button id="clearBtn" class="chip">Clear</button>
+          <input id="fileInput" type="file" accept=".txt,.md,text/plain" hidden />
+        </div>
+      </div>
+      <textarea id="input" class="ar-input" dir="rtl" spellcheck="false"
+        placeholder="اكتب أو الصق النص العربي هنا…"></textarea>
+      <div class="meta-row">
+        <span id="inCount" class="muted">0 characters</span>
+      </div>
+    </section>
+
+    <!-- OUTPUT -->
+    <section class="panel" aria-label="Output">
+      <div class="panel-head">
+        <h2>Output — IndoPak</h2>
+        <div class="panel-actions">
+          <button id="copyBtn" class="chip">Copy</button>
+        </div>
+      </div>
+      <div id="output" class="ar-output" dir="rtl"></div>
+      <div class="meta-row">
+        <span id="ruleCount" class="muted">No conversions applied</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- CONTROLS -->
+  <section class="controls" aria-label="Settings">
+    <div class="control">
+      <label for="fontSel">IndoPak font</label>
+      <select id="fontSel">
+        <optgroup label="IndoPak — Nastaliq (Urdu calligraphic)">
+          <option value="'Noto Nastaliq Urdu', serif">Noto Nastaliq Urdu</option>
+          <option value="'Gulzar', serif">Gulzar (light Nastaliq)</option>
+        </optgroup>
+        <optgroup label="IndoPak — Naskh (Quran style)">
+          <option value="'Scheherazade New', serif" selected>Scheherazade (Quran Naskh)</option>
+          <option value="'Lateef', serif">Lateef (Pakistani Naskh)</option>
+          <option value="'Noto Naskh Arabic', serif">Noto Naskh</option>
+          <option value="'Harmattan', serif">Harmattan (rounded Naskh)</option>
+          <option value="'Markazi Text', serif">Markazi (modern Naskh)</option>
+        </optgroup>
+        <optgroup label="Other styles">
+          <option value="'Amiri Quran', serif">Amiri (Uthmani look)</option>
+          <option value="'Aref Ruqaa', serif">Aref Ruqaa (Ruqʿah)</option>
+          <option value="'Reem Kufi', sans-serif">Reem Kufi (Kufic)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="control">
+      <label for="sizeRange">Font size <span id="sizeVal" class="muted">34px</span></label>
+      <input id="sizeRange" type="range" min="20" max="72" step="1" value="34" />
+    </div>
+
+    <div class="control">
+      <label for="layoutSel">Text layout</label>
+      <select id="layoutSel">
+        <option value="">Natural (right-aligned)</option>
+        <option value="lay-justified">Justified</option>
+        <option value="lay-centered">Centered</option>
+        <option value="lay-verse">Verse (centered, airy)</option>
+        <option value="lay-spacious">Spacious lines</option>
+        <option value="lay-compact">Compact</option>
+      </select>
+    </div>
+
+    <fieldset class="control rules">
+      <legend>Conversion rules</legend>
+      <label class="switch"><input type="checkbox" id="rWasl" checked /> <span>Alif-wasla ٱ → plain alif ا</span></label>
+      <label class="switch"><input type="checkbox" id="rSukoon" checked /> <span>Uthmani sukoon ۡ → jazm ْ</span></label>
+      <label class="switch"><input type="checkbox" id="rDagger" /> <span>Dagger alif ٰ → full alif ا</span></label>
+      <label class="switch"><input type="checkbox" id="rMarks" /> <span>Strip Quranic annotation / waqf marks</span></label>
+      <label class="switch"><input type="checkbox" id="rTatweel" /> <span>Remove tatweel ـ</span></label>
+    </fieldset>
+  </section>
+
+  <details class="notes">
+    <summary>About this conversion</summary>
+    <p>
+      IndoPak (Indo-Pak) script differs from the Uthmani Mushaf script in two ways: <strong>letter & diacritic shapes</strong>
+      (handled by the IndoPak font) and a handful of <strong>encoding conventions</strong> (handled by the rules above).
+      This tool applies the safe, well-defined Unicode-level conversions and renders the result in an IndoPak typeface.
+    </p>
+    <p class="muted">
+      Note: a fully faithful Uthmani→IndoPak transformation (e.g. tanween idghaam display, all small-letter conventions) is
+      font- and ruling-dependent. The toggles cover the standard reversible conversions; the rest is achieved through font rendering.
+    </p>
+  </details>
+
+  <footer class="foot muted">Offline-ready · vanilla JS · no data leaves your device</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
