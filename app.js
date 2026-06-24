@@ -42,8 +42,20 @@ function countReplace(text, pattern, replacement) {
 const RULES = {
   rWasl:    (t) => countReplace(t, new RegExp(CH.ALEF_WASLA, 'g'), CH.ALEF),
   rSukoon:  (t) => countReplace(t, new RegExp(CH.SMALL_HIGH_KHAH, 'g'), CH.SUKOON),
-  // Dagger alif → full alif: insert a real alif after the carrying letter's slot.
-  rDagger:  (t) => countReplace(t, new RegExp(CH.DAGGER_ALEF, 'g'), CH.ALEF),
+  // Dagger alif → a single standing alif, without ever producing a double alif:
+  //  • dagger next to an existing alif → just drop the dagger (alif already there)
+  //  • fatha + dagger (long ā, no written alif) → one alif, dropping the now-redundant
+  //    fatha (which the IndoPak font would otherwise draw as a second vertical stroke)
+  //  • any remaining lone dagger → standing alif
+  rDagger: (t) => {
+    let count = 0;
+    const bump = () => { count++; return CH.ALEF; };
+    let out = t
+      .replace(/اٰ/g, () => { count++; return CH.ALEF; }) // alif + dagger
+      .replace(/ٰا/g, () => { count++; return CH.ALEF; }) // dagger + alif
+      .replace(/َ?ٰ/g, bump);                            // (fatha?) + dagger
+    return { text: out, count };
+  },
   rMarks:   (t) => countReplace(t, ANNOTATION_RE, ''),
   rTatweel: (t) => countReplace(t, new RegExp(CH.TATWEEL, 'g'), ''),
   // Urdu / IndoPak letter forms
