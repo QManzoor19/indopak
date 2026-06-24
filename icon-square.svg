@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="g" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#1c5240"/>
+      <stop offset="1" stop-color="#06160f"/>
+    </radialGradient>
+  </defs>
+  <!-- full-bleed square background; iOS rounds the corners itself -->
+  <rect width="512" height="512" fill="url(#g)"/>
+  <!-- eight-pointed star (khatam) -->
+  <g fill="none" stroke="#d4af37" stroke-width="6" stroke-opacity="0.5">
+    <rect x="116" y="116" width="280" height="280" transform="rotate(45 256 256)"/>
+    <rect x="116" y="116" width="280" height="280"/>
+  </g>
+  <text x="256" y="340" font-family="Amiri, Georgia, serif" font-size="260" font-weight="700"
+        text-anchor="middle" fill="#d4af37">ﮬ</text>
+</svg>
